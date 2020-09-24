@@ -8,7 +8,7 @@ services:
         image: prom/prometheus:v2.15.2
         container_name: prometheus
         volumes:
-            - /etc/prometheus:/etc/prometheus
+            - ./config:/etc/prometheus
             - data:/prometheus
         command:
             - '--config.file=/etc/prometheus/prometheus.yml'
@@ -45,3 +45,14 @@ services:
         restart: unless-stopped
         ports: 
             - "8080:8080"
+    blackbox:
+        image: prom/blackbox-exporter
+        container_name: blackbox
+        volumes: 
+            - ./config:/config
+        command: 
+            - "--config.file=/config/blackbox.yml"
+            - "--history.limit=50"
+        restart: unless-stopped
+        ports: 
+            - "9115:9115"
