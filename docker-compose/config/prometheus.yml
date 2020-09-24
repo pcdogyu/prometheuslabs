@@ -39,3 +39,7 @@ scrape_configs:
   - job_name: "cAdviser"
     static_configs:
     - targets: ['192.168.123.135:8080']
+
+  - job_name: "blackbox"
+    static_configs:
+    - targets: ['192.168.123.135:9115']
