@@ -2,6 +2,7 @@ version: '3.7'
 
 volumes:
     data: {}
+    grafana_data: {}
 
 services: 
     prometheus:
@@ -56,3 +57,22 @@ services:
         restart: unless-stopped
         ports: 
             - "9115:9115"
+    pushgateway:
+        image: prom/pushgateway:v1.1.0
+        container_name: pushgateway
+        restart: unless-stopped
+        ports: 
+            - "9091:9091"
+    grafana:
+        image: grafana/grafana:latest
+        container_name: grafana
+        volumes: 
+            - grafana_data:/var/lib/grafana
+            - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+        environment: 
+            - GF_SECURITY_ADMIN_USER=promadmin
+            - GF_SECURITY_ADMIN_PASSWORD=12345.com
+            - GF_USERS_ALLOW_SIGN_UP=false
+        restart: unless-stopped
+        ports: 
+            - "3000:3000"
